@@ -30,7 +30,17 @@ public class NIOFileTest {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		} else {
+			Files.list(playPath).forEach(p -> {
+				try {
+					Files.delete(p);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			});
 		}
+
 		System.out.println(playPath);
 		assertTrue(Files.exists(playPath));
 
@@ -53,13 +63,12 @@ public class NIOFileTest {
 		System.out.println("----------print all paths-------------");
 		Files.newDirectoryStream(playPath)
 				.forEach(System.out::println);
-		System.out.println("----------print only temp files-------------");
+		System.out.println(
+				"----------print only temp files-------------");
 		Files.newDirectoryStream(playPath, p -> {
-			System.out.println(p.getFileName());
-			System.out.println(p.toFile().getName());
-			
-			return p.toFile().isFile() && p.getFileName().toString().startsWith("temp");
+			return p.toFile().isFile()
+					&& p.getFileName().toString().startsWith("temp");
 		}).forEach(System.out::println);
-	}
 
+	}
 }
