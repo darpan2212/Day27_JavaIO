@@ -28,15 +28,13 @@ public class JavaWatchServiceExa {
 
 	private void scanAndRegisterDirectories(Path start)
 			throws IOException {
-		Files.walkFileTree(start,
-				new SimpleFileVisitor<Path>(path -> {
-					try {
-						registerDirectoryWatchers(path);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}));
+		Files.walkFileTree(start, new SimpleFileVisitor<Path>(p -> {
+			try {
+				registerDirectoryWatchers(p);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}));
 	}
 
 	private void registerDirectoryWatchers(Path dir)

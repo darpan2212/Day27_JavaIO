@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 
 public class WatcherTest {
 	public static String HOME = "d:\\Darpan";
-	public static String PLAY_WITH_NIO = "tempDir";
+	public static String PLAY_WITH_NIO = "watch_dir";
 
 	public static void main(String[] args) throws IOException {
 		Path playPath = Paths.get(HOME + "/" + PLAY_WITH_NIO);
