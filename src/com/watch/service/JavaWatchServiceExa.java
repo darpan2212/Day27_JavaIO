@@ -2,7 +2,6 @@ package com.watch.service;
 
 import java.io.IOException;
 import java.nio.file.FileSystems;
-import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardWatchEventKinds;
@@ -12,7 +11,6 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 */import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,45 +28,24 @@ public class JavaWatchServiceExa {
 
 	private void scanAndRegisterDirectories(Path start)
 			throws IOException {
-		Files.walkFileTree(start, new SimpleFileVisitor() {
-
-			@Override
-			public FileVisitResult visitFileFailed(Path file,
-					IOException exc) throws IOException {
-				// TODO Auto-generated method stub
-				return FileVisitResult.CONTINUE;
-			}
-
-			@Override
-			public FileVisitResult visitFile(Path file,
-					BasicFileAttributes attrs) throws IOException {
-				// TODO Auto-generated method stub
-				return FileVisitResult.CONTINUE;
-			}
-
-			@Override
-			public FileVisitResult postVisitDirectory(Path dir,
-					IOException exc) throws IOException {
-				// TODO Auto-generated method stub
-				return FileVisitResult.CONTINUE;
-			}
-
-			@Override
-			public FileVisitResult preVisitDirectory(Path dir,
-					BasicFileAttributes attrs) throws IOException {
-				System.out.println(
-						"previsit dir method has been called" + dir);
-				registerDirectoryWatchers(dir);
-				return FileVisitResult.CONTINUE;
-			}
-		});
+		Files.walkFileTree(start,
+				new SimpleFileVisitor<Path>(path -> {
+					try {
+						registerDirectoryWatchers(path);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}));
 	}
 
 	private void registerDirectoryWatchers(Path dir)
 			throws IOException {
-		WatchKey key = dir.register(watcher, StandardWatchEventKinds.ENTRY_CREATE,
-				StandardWatchEventKinds.ENTRY_DELETE, StandardWatchEventKinds.ENTRY_MODIFY);
-		
+		WatchKey key = dir.register(watcher,
+				StandardWatchEventKinds.ENTRY_CREATE,
+				StandardWatchEventKinds.ENTRY_DELETE,
+				StandardWatchEventKinds.ENTRY_MODIFY);
+
 		dirWatchers.put(key, dir);
 	}
 
